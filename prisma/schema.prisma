@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -11,6 +12,7 @@ model User {
   name      String?
   email     String   @unique
   password  String
+  role      String   @default("USER")
   sounds    Sound[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

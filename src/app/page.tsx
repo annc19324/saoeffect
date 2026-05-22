@@ -1,8 +1,9 @@
 
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Play, Pause, Download } from "lucide-react";
+import { Play, Pause, Download, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type Sound = {
   id: string;
@@ -13,12 +14,13 @@ type Sound = {
 };
 
 export default function Home() {
+  const { data: session } = useSession();
   const [sounds, setSounds] = useState<Sound[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPlaying, setCurrentPlaying] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
+  const loadSounds = () => {
     fetch('/api/sounds')
       .then(res => res.json())
       .then(data => {
@@ -29,7 +31,23 @@ export default function Home() {
         toast.error("Failed to load sounds");
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadSounds();
   }, []);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this sound?")) return;
+    try {
+      const res = await fetch(\`/api/sounds/\${id}\`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      toast.success("Sound deleted");
+      loadSounds();
+    } catch (err) {
+      toast.error("Failed to delete");
+    }
+  };
 
   const togglePlay = (url: string) => {
     if (currentPlaying === url) {
@@ -67,7 +85,16 @@ export default function Home() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sounds.map(sound => (
-            <div key={sound.id} className="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition duration-300 group">
+            <div key={sound.id} className="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-blue-500/50 transition duration-300 group relative">
+              {(session?.user as any)?.role === 'ADMIN' && (
+                <button 
+                  onClick={() => handleDelete(sound.id)}
+                  className="absolute top-2 right-2 p-2 text-red-500 hover:bg-red-500/10 rounded-full transition"
+                  title="Admin Delete"
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
               <h3 className="text-xl font-semibold mb-2">{sound.title}</h3>
               <p className="text-sm text-slate-400 mb-4">{sound.description}</p>
               <div className="text-xs text-slate-500 mb-4">By: {sound.user.name}</div>
