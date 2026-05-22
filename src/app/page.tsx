@@ -40,7 +40,7 @@ export default function Home() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this sound?")) return;
     try {
-      const res = await fetch(\`/api/sounds/\${id}\`, { method: "DELETE" });
+      const res = await fetch(`/api/sounds/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Delete failed");
       toast.success("Sound deleted");
       loadSounds();
