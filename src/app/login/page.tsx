@@ -31,8 +31,8 @@ export default function Login() {
       <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-400 mb-1">Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full bg-slate-900 border border-slate-700 rounded-md p-3 focus:outline-none focus:border-blue-500 transition" />
+          <label className="block text-sm font-medium text-slate-400 mb-1">Email / Username</label>
+          <input type="text" value={email} onChange={e => setEmail(e.target.value)} required className="w-full bg-slate-900 border border-slate-700 rounded-md p-3 focus:outline-none focus:border-blue-500 transition" />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-400 mb-1">Password</label>
