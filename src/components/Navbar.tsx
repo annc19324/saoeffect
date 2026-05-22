@@ -9,7 +9,8 @@ export default function Navbar() {
   return (
     <nav className="bg-slate-800 p-4 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+        <Link href="/" className="flex items-center gap-2 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          <img src="/logo.png" alt="Sao Effect Logo" className="w-8 h-8 rounded-full object-cover" />
           Sao Effect
         </Link>
         <div className="flex gap-4 items-center">
